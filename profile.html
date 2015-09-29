@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Super Drive</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/fonts.css" />
+    <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.min.css" />
+    <link href="css/plugins/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/plugins/gritter/jquery.gritter.css" />
+    <link href="css/plugins/select2/select2.css" rel="stylesheet" />
+    <link href="css/plugins/select2/select2.custom.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/themes/basicstyle.css" />
+    <link rel="stylesheet" href="css/jquery.loader.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="cordova.js"></script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="main-container">
+            <nav class="navbar-top" role="navigation">
+                <div class="nav-top col-md-12 col-sm-12 col-xs-12">
+                    <ul class="nav navbar-right col-md-12 col-sm-12 col-xs-12">
+
+                        <li class="dropdown" id="navtopitem">
+                            <a href="javascript:location.href='home.html'">
+                                <span class="fa fa-long-arrow-left"></span>
+                            </a>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell"></i><span class="badge up badge-success NotificationsCount">0</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-scroll dropdown-alerts margin">
+                                <li class="dropdown-header">
+                                    <i class="fa fa-bell"></i><span class="NotificationsCount">0</span> New Notification
+                                </li>
+                                <li id="alertScroll">
+                                    <ul class="list-unstyled"></ul>
+                                </li>
+                                <li class="dropdown-footer">
+                                    <a href="notifications.html">
+                                        View All Notifications
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown user-box">
+                            <a href="profile.html">
+                                <img id="user-img" class="img-circle" src="images/unknown.png" alt="" />
+                                <span id="user-name" class="user-info"></span>
+                            </a>
+                        </li>
+
+                        <li class="dropdown nav-search-icon">
+                            <a href="javascript:OpenFeedbackPopup();">
+                                <span class="glyphicon glyphicon-comment"></span>
+                            </a>
+                        </li>
+
+                        <li class="dropdown nav-search-icon"></li>
+                    </ul>
+                </div>
+
+
+            </nav>
+
+
+            <div id="page-wrapper">
+                <div class="row">
+                    <div class="col-lg-12" id="detailsDiv">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3">
+                                <div class="well well-sm white">
+                                    <div class="profile-pic">
+                                        <a href="#">
+                                            <img id="userimg" src="images/unknown.png" onclick="ShowFileSelector()" class="img-responsive" alt="" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-9 col-md-9" id="profiledetails">
+                                <div class="row" id="profiledetailsdiv">
+                                    <form class="form-horizontal" id="frmsettings" role="form">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Name:</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" name="txtname" id="txtname" class="form-control" placeholder="Your name here" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Country:</label>
+                                            <div class="col-sm-3">
+                                                <select class="form-control" id="ddlcountry" name="ddlcountry">
+                                                    <option selected value="Uganda">Uganda</option>
+                                                    <option value="Kenya" disabled>Kenya (soon)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="display:none">
+                                            <label class="col-sm-3 control-label">Email:</label>
+                                            <div class="col-sm-3">
+                                                <div class="input-group">
+                                                    <input type="email" disabled name="txtemail" id="txtemail" class="form-control" placeholder="name@example.com" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Password:</label>
+                                            <div class="col-sm-3">
+                                                <input type="password" name="txtpassword" id="txtpassword" class="form-control" placeholder="password" />
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Notifications :</label>
+                                            <div class="col-sm-9">
+                                                <div class="col-sm-3">
+                                                    <label>
+                                                        <input name="NotificationSoundSwitcher" id="NotificationSoundSwitcher" class="tc tc-switch tc-switch-3" type="checkbox" />
+                                                        <span class="labels" id="alignLbl"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="padding-bottom"></div>
+
+                                        <div class="navbar-fixed-bottom bottom-bar">
+                                            <div id="divButtons" class="row">
+                                                <button class="col-md-6 col-sm-6 col-xs-6 btn-primary text-center" id="saveDiv" type="submit">
+                                                    <span><i class="fa fa-floppy-o"></i></span>
+                                                    <span> Save</span>
+                                                </button>
+                                                <button class="col-md-6 col-sm-6 col-xs-6 btn-inverse text-center" onclick="Logout()">
+                                                    <span><i class="fa fa-sign-out"></i></span>
+                                                    <span> Logout</span>
+                                                </button>
+                                            </div>
+
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <input type="file" onchange="convertImgToBase64URL(event)" accept="image/*" id="uploaduserimage" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="js/plugins/jqueryui/jquery-ui-1.10.4.custom.min.js"></script>
+    <script src="js/plugins/jqueryui/jquery.ui.touch-punch.min.js"></script>
+    <script src="js/plugins/select2/select2.min.js"></script>
+    <script src="js/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+    <script src="js/plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/plugins/gritter/jquery.gritter.min.js"></script>
+    <script src="js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.init.js"></script>
+    <script src="js/jquery.loader.min.js" type="text/javascript"></script>
+    <script src="scripts/general.js"></script>
+    <script src="scripts/profile.js"></script>
+    <script src="js/plugins/bootbox/bootbox.min.js"></script>
+</body>
+</html>

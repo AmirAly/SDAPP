@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Map</title>
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBbkSt_pCrWS4OxeVx73tABk9Pl28P1_QA">
+    </script>
+    <link href="css/map.css" rel="stylesheet" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.loader.min.js" type="text/javascript"></script>
+    <script src="scripts/general.js"></script>
+    <script src="scripts/map.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/jquery.loader.min.css">
+    <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.min.css">
+
+</head>
+<body>
+    <div class="inprogress-bar" >
+        <div onclick="Stop()" class="col-md-5 col-sm-5 col-xs-5">
+            <i class="fa fa-ban"></i><span id="actionTxt"> Stop</span>
+        </div>
+        <div onclick="showRoute()" class="col-md-5 col-sm-5 col-xs-5 sip">
+            <i class="fa fa-automobile"></i><span id="actionTxt"> Route</span>
+        </div>
+        <div onclick="panToMe()"  class="col-md-2 col-sm-2 col-xs-2 sip">
+            <i class="fa fa-map-marker"></i>
+        </div>
+    </div>
+    <div class="stop-bar">
+        <div class="col-md-12">
+            Are you sure you want to stop the navigation now ?
+        </div>
+        <div onclick="noClicked()" class="col-md-6 col-sm-6 col-xs-6 yellow"><i class="fa fa-thumb-down"></i><span> No</span></div>
+        <div onclick="endRouting()"  class="col-md-6 col-sm-6 col-xs-6 sip red"><i class="fa fa-thumb-up"></i><span> Yes</span></div>
+    </div>
+    <div class="start-bar" onclick="startMoving()">
+        <i class="fa fa-location-arrow"></i><span id="actionTxt"> Start</span>
+    </div>
+    <div class="route-bar">
+        <h1>Please follow those instructions:</h1>
+
+    </div>
+    <div id="map-canvas"></div>
+
+</body>
+</html>
