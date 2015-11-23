@@ -765,7 +765,7 @@ function getParameterByName(name) {
 })();
 function ViewImage(src) {
     bootbox.dialog({
-        message: '<div class="row">\
+        message: '<div class="row wtr">\
                     <img style="width:100%;height:100%;" src="data:image/png;base64,' + src + '"/>\
                   </div>',
         title: "View Image",
@@ -777,6 +777,12 @@ function ViewImage(src) {
                 }
             }
         }
+    });
+    wmark.init({
+        className: 'wtr',
+        position: 'top-right',
+        path: '/images/icon.png',
+        opacity:'0.5'
     });
 }
 function OpenFeedbackPopup() {
