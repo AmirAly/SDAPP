@@ -1,8 +1,13 @@
 var UserID = User.Id
 var StreetID = getParameterByName("streetId");
+localStorage.setItem('streetId', StreetID);
 var StreetName = getParameterByName("streetName");
+localStorage.setItem('streetName', StreetName);
 var StreetStatus = getParameterByName("status");
+localStorage.setItem('status', StreetStatus);
 var IsFavourite = getParameterByName("isFavourite");
+localStorage.setItem('isFavourite', IsFavourite);
+
 var selectedEmoticon = 0;
 var selectedStatus = 0;
 var Page = 'Street';
@@ -88,9 +93,10 @@ function Post() {
         $('#text').text("");
         $('#text').val("");
         window.scrollTo(0, 500);
+        updateStatus();
     }, false);
 
-    return false;
+
 }
 function PostAnonymous() {
     if (selectedEmoticon == 0 && selectedStatus == 0) {
@@ -111,7 +117,7 @@ function PostAnonymous() {
     var image = $('#UploadedImageSource').val();
     var _Url = APILink + '/api/Reports/ReportStreet';
     var _Type = "post";
-    var _Data = { 'ReportText': text, 'StreetId': streetid, 'ReportImage': image, 'UserId': userid, 'StreetExtraInfo': report, 'StreetStatus': selectedStatus, 'AnonymousReport': false };
+    var _Data = { 'ReportText': text, 'StreetId': streetid, 'ReportImage': image, 'UserId': userid, 'StreetExtraInfo': report, 'StreetStatus': selectedStatus, 'AnonymousReport': true };
     CallAPI(_Url, _Type, _Data, function (data) {
         $('#empty-streets-msg').remove();
         var commenttext = "";
@@ -166,16 +172,30 @@ function PostAnonymous() {
         $('#text').text("");
         $('#text').val("");
         window.scrollTo(0, 500);
+        updateStatus();
     }, false);
 
-    return false;
+    
 }
 function LoadTimeline() {
+    $('#appendform').empty();
     $('#streetname').text(StreetName);
-    $('#CurrentStreetStatusEmoticon').attr('src', 'images/' + StreetStatus + '.png');
+
+    var _Url = APILink + '/api/Streets/GetById';
+    var _Type = "get";
+    var _Data = { '_Id': StreetID};
+    CallAPI(_Url, _Type, _Data, function (data) {
+        console.debug(data);
+        if (data.Code != 20) {
+            $('#CurrentStreetStatusEmoticon').attr('src', 'images/' + data.Data.CurrentStatus + '.png');
+            localStorage.setItem('status', data.Data.CurrentStatus);
+        }
+    }, false);
+
+
     var _Url = APILink + '/api/Streets/GetStreetTimeline';
     var _Type = "get";
-    var _Data = { '_streetId': StreetID };
+    var _Data = { '_streetId': StreetID, '_currentUser': User.Id };
     CallAPI(_Url, _Type, _Data, function (data) {
         console.debug(data);
         if (data.Code == 20) {
@@ -221,20 +241,22 @@ function LoadTimeline() {
                                                             '+ EmoticonImageElement + '\
                                                         </div>\
                                                     </div>\
-                                                    <div onclick="javascript:location.href=\'streetreplies.html?reportId=' + res.Id + '\'" class="col-md-7 col-sm-7 col-lg-7 col-xs-7">\
-                                                        <a class="author" id="postname"><h6> ' + res.Users.DisplayName + '  </h6></a>\
-                                                        <span> ' + commenttext + '</span>\
-                    ' + ReportImage + '\
-                    </div>\
-                    <div class="col-md-2 col-sm-2 col-lg-2 col-xs-2 text-center">\
-                       ' + StreetStatusToAppend + '\
-                      </div>\
-                </div>\
-   <div class="row text-center"><i class="fa fa-2x fa-comment"></i><span class="badge up badge-success">' + res.RepliesCount + '</span>\
-                        <i class="fa fa-2x fa-star"></i><span class="badge up badge-success">' + res.FeedbacksCount + '</span></div>\
-            </div>\
-        </div>\
-    </li>');
+                                                    <div class="col-md-7 col-sm-7 col-lg-7 col-xs-7">\
+                                                        <a  onclick="javascript:location.href=\'streetreplies.html?reportId=' + res.Id + '\'" class="author" id="postname"><h6> ' + res.Users.DisplayName + '  </h6></a>\
+                                                        <span  onclick="javascript:location.href=\'streetreplies.html?reportId=' + res.Id + '\'"> ' + commenttext + '</span>\
+                                                    ' + ReportImage + '\
+                                                    </div>\
+                                                    <div class="col-md-2 col-sm-2 col-lg-2 col-xs-2 text-center">\
+                                                       ' + StreetStatusToAppend + '\
+                                                      </div>\
+                                                </div>\
+                                            <div class="row text-center">\
+                                                <i class="fa fa-2x fa-comment"></i><span class="badge up badge-success">' + res.RepliesCount + '</span>\
+                                                <i class="fa fa-2x fa-star"></i><span class="badge up badge-success">' + res.FeedbacksCount + '</span>\
+                                            </div>\
+                                    </div>\
+                                </div>\
+                            </li>');
                 }
                 else {
                     $('#appendform').append(' <li class="timeline-event">\
@@ -326,5 +348,16 @@ function SetStatus(rep, id) {
     }
 }
 
-
+function updateStatus() {
+    var _Url = APILink + '/api/Streets/GetById';
+    var _Type = "get";
+    var _Data = { '_Id': StreetID };
+    CallAPI(_Url, _Type, _Data, function (data) {
+        console.debug(data);
+        if (data.Code != 20) {
+            $('#CurrentStreetStatusEmoticon').attr('src', 'images/' + data.Data.CurrentStatus + '.png');
+            localStorage.setItem('status', data.Data.CurrentStatus);
+        }
+    }, false);
+}
 

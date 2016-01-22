@@ -31,6 +31,7 @@ $(document).ready(function () {
             var _Data = { 'Email': _email, 'Password': _password };
             CallAPI(_Url, _Type, _Data, function (data) {
                 if (data.Code == 200) {
+                    console.log(data.Data);
                     localStorage.setItem("User",JSON.stringify(data.Data));
                     $.gritter.add({
                         title: 'Thank you, please wait',

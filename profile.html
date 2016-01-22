@@ -67,91 +67,203 @@
                         <li class="dropdown nav-search-icon"></li>
                     </ul>
                 </div>
-
-
             </nav>
 
 
             <div id="page-wrapper">
                 <div class="row">
-                    <div class="col-lg-12" id="detailsDiv">
-                        <div class="row">
-                            <div class="col-lg-3 col-md-3">
-                                <div class="well well-sm white">
-                                    <div class="profile-pic">
-                                        <a href="#">
-                                            <img id="userimg" src="images/unknown.png" onclick="ShowFileSelector()" class="img-responsive" alt="" />
-                                        </a>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+                            <li role="presentation"><a href="#blocked" aria-controls="blocked" role="tab" data-toggle="tab">Blocked users</a></li>
+                            <li role="presentation"><a href="#about" aria-controls="about" role="tab" data-toggle="tab">About Us</a></li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="profile">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="detailsDiv">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3">
+                                            <div class="well well-sm white">
+                                                <div class="profile-pic">
+                                                    <a href="#">
+                                                        <img id="userimg" src="images/unknown.png" onclick="ShowFileSelector()" class="img-responsive" alt="" />
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-9 col-md-9" id="profiledetails">
+                                            <div class="row" id="profiledetailsdiv">
+                                                <form class="form-horizontal" id="frmsettings" role="form">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Name:</label>
+                                                        <div class="col-sm-3">
+                                                            <input type="text" name="txtname" id="txtname" class="form-control" placeholder="Your name here" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Country:</label>
+                                                        <div class="col-sm-3">
+                                                            <select class="form-control" id="ddlcountry" name="ddlcountry">
+                                                                <option selected value="Uganda">Uganda</option>
+                                                                <option value="Kenya" disabled>Kenya (soon)</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Password:</label>
+                                                        <div class="col-sm-3">
+                                                            <input type="password" name="txtpassword" id="txtpassword" class="form-control" placeholder="password" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Notifications :</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="col-sm-3">
+                                                                <label>
+                                                                    <input name="NotificationSoundSwitcher" id="NotificationSoundSwitcher" class="tc tc-switch tc-switch-3" type="checkbox" />
+                                                                    <span class="labels" id="alignLbl"></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="padding-bottom"></div>
+
+                                                    <div class="navbar-fixed-bottom bottom-bar">
+                                                        <div id="divButtons" class="row">
+                                                            <button class="col-md-6 col-sm-6 col-xs-6 btn-primary text-center" id="saveDiv" type="submit">
+                                                                <span><i class="fa fa-floppy-o"></i></span>
+                                                                <span> Save</span>
+                                                            </button>
+                                                            <button class="col-md-6 col-sm-6 col-xs-6 btn-inverse text-center" onclick="Logout()">
+                                                                <span><i class="fa fa-sign-out"></i></span>
+                                                                <span> Logout</span>
+                                                            </button>
+                                                        </div>
+
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-9 col-md-9" id="profiledetails">
-                                <div class="row" id="profiledetailsdiv">
-                                    <form class="form-horizontal" id="frmsettings" role="form">
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label">Name:</label>
-                                            <div class="col-sm-3">
-                                                <input type="text" name="txtname" id="txtname" class="form-control" placeholder="Your name here" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label">Country:</label>
-                                            <div class="col-sm-3">
-                                                <select class="form-control" id="ddlcountry" name="ddlcountry">
-                                                    <option selected value="Uganda">Uganda</option>
-                                                    <option value="Kenya" disabled>Kenya (soon)</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group" style="display:none">
-                                            <label class="col-sm-3 control-label">Email:</label>
-                                            <div class="col-sm-3">
-                                                <div class="input-group">
-                                                    <input type="email" disabled name="txtemail" id="txtemail" class="form-control" placeholder="name@example.com" />
+                            <div role="tabpanel" class="tab-pane" id="blocked">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12" id="profiledetails">
+                                            <div class="row" id="profiledetailsdiv">
+
+                                                <div class="form-group">
+                                                    <div class="col-lg-12">
+                                                        <table class="table" id="tblBlockedUsers">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>User Name</th>
+                                                                    <th>Actoin</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="bodyBlockedUsers">
+                                                             
+                                                            </tbody>
+                                                        </table>
+                                                        <div id="noBlocksMessage" class="text-center">
+                                                            <b>You don't have any blocked users</b>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label">Password:</label>
-                                            <div class="col-sm-3">
-                                                <input type="password" name="txtpassword" id="txtpassword" class="form-control" placeholder="password" />
-                                            </div>
-                                        </div>
+                                                <div class="navbar-fixed-bottom bottom-bar">
+                                                    <div id="divButtons" class="row">
 
+                                                        <button class="col-md-12 col-sm-12 col-xs-12 btn-inverse text-center" onclick="Logout()">
+                                                            <span><i class="fa fa-sign-out"></i></span>
+                                                            <span> Logout</span>
+                                                        </button>
+                                                    </div>
 
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label">Notifications :</label>
-                                            <div class="col-sm-9">
-                                                <div class="col-sm-3">
-                                                    <label>
-                                                        <input name="NotificationSoundSwitcher" id="NotificationSoundSwitcher" class="tc tc-switch tc-switch-3" type="checkbox" />
-                                                        <span class="labels" id="alignLbl"></span>
-                                                    </label>
                                                 </div>
+
                                             </div>
                                         </div>
-
-                                        <div class="padding-bottom"></div>
-
-                                        <div class="navbar-fixed-bottom bottom-bar">
-                                            <div id="divButtons" class="row">
-                                                <button class="col-md-6 col-sm-6 col-xs-6 btn-primary text-center" id="saveDiv" type="submit">
-                                                    <span><i class="fa fa-floppy-o"></i></span>
-                                                    <span> Save</span>
-                                                </button>
-                                                <button class="col-md-6 col-sm-6 col-xs-6 btn-inverse text-center" onclick="Logout()">
-                                                    <span><i class="fa fa-sign-out"></i></span>
-                                                    <span> Logout</span>
-                                                </button>
-                                            </div>
-
-                                        </div>
-
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
+                            <div role="tabpanel" class="tab-pane" id="about">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3">
+                                            <div class="well well-sm white">
+                                                <div class="logo-pic">
+                                                    <a href="#">
+                                                        <img src="images/avancylogo.png" class="img-responsive" alt="logo" />
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-9 col-md-9" id="profiledetails">
+                                            <div class="row" id="profiledetailsdiv">
+                                                <form class="form-horizontal" id="frmabout" role="form">
+
+                                                    <div class="form-group">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <h1>Avance Tec</h1>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <b>A professional and high quality mobile app providers</b>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="clear2"></div>
+                                                    <div class="clear3"></div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <span>+44 20 37455776</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clear3"></div>
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <span>AvanceTec@AvanceTec.com</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clear3"></div>
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <span>INTERNATIONAL HOUSE , 24 HOLBORN VIADUCT , LONDON , ENGLAND , EC1A 2BN , Company No. 09530369</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="padding-bottom"></div>
+
+                                                    <div class="navbar-fixed-bottom bottom-bar">
+                                                        <div id="divButtons" class="row">
+                                                            <button class="col-md-12 col-sm-12 col-xs-12 btn-inverse text-center" onclick="Logout()">
+                                                                <span><i class="fa fa-sign-out"></i></span>
+                                                                <span> Logout</span>
+                                                            </button>
+                                                        </div>
+
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
                         </div>
                     </div>
+
                 </div>
             </div>
 

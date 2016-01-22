@@ -766,7 +766,8 @@ function getParameterByName(name) {
 function ViewImage(src) {
     bootbox.dialog({
         message: '<div class="row wtr">\
-                    <img style="width:100%;height:100%;" src="data:image/png;base64,' + src + '"/>\
+                    <img class="imgTimelineModal" style="width:100%;height:100%;" src="data:image/png;base64,' + src + '"/>\
+                    <Img src="icon.png" class="waterMark"/>\
                   </div>',
         title: "View Image",
         buttons: {
