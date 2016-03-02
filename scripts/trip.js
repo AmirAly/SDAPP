@@ -1,6 +1,17 @@
 ﻿var Page = 'Trip';
 var UserID = localStorage.getItem("UserId");
 $(document).ready(function () {
+    if (User == null || typeof User == 'undefined' || User.Id < 1 || User.Email == "guest@superdrive.com") {
+        //hide icons
+        $('.toggleShow').attr('style', 'display:none !important');
+        console.log('not logged');
+    }
+    else {
+        //show icons
+        $('.toggleShow').attr('style', 'display:block !important');
+        console.log('logged');
+    }
+    console.debug(User);
     geolocate();
 });
 function startTrip() {

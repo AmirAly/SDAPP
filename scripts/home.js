@@ -4,8 +4,7 @@ IsRefreshing = false;
 var CurrentCountry = User.Country;
 var CountryToChange = User.Country;
 var ImageInBase64 = null;
-function Ad()
-{
+function Ad() {
     $('#imgAd').fadeIn(3000, function () {
         $('#txt1').fadeIn(1500, function () {
             $("#txt2").fadeIn(1000);
@@ -15,33 +14,51 @@ function Ad()
 $(document).ready(function () {
     //CurrentCountry = User.CurrentCountry;
     //CountryToChange = User.CurrentCountry;
+    console.debug(User);
+    console.log(User.Email);
     $("#page-wrapper").attr('style', 'margin-top: 88px !important');
-    if (User == null || typeof User == 'undefined' || User.Id < 1) {
-        window.location.href = "index.html";
+    if (User == null || typeof User == 'undefined' || User.Id < 1 || User.Email == "guest@superdrive.com") {
+        notlogged();
+        loadHome();
+        Ad();
     }
     else {
+        logged();
         loadHome();
         loadUserData();
         Ad();
+
     }
 });
-function showGPSBar()
-{
+function notlogged() {
+    //hide icons
+    console.log('not logged');
+    $('.toggleShow').attr('style', 'display:none !important');
+    $('.sip').attr('style', 'border: none  !important;');
+    $('.sip:first').attr('style', 'border-right: solid #fff 1px !important ; border-left: solid #fff 1px !important;');
+}
+function logged() {
+    //show icons
+    console.log('logged');
+    $('.toggleShow').attr('style', 'display:block !important');
+    $('.userProfile').attr('href', 'profile.html');
+    $('.userProfile').attr('data-intro', 'Access your profile from here');
+    $('.userProfile').attr('data-step', '4');
+    $('.userProfile').attr('data-position', 'profile.html');
+}
+function showGPSBar() {
     $('.gps-bar').toggle();
 }
 
-function toggleAr()
-{
-    if (AutoReporting == false)
-    {
+function toggleAr() {
+    if (AutoReporting == false) {
         $('#ARInd').addClass('AREnabled');
         $('#ARInd').removeClass('ARDisabled');
         localStorage.setItem('AutoReporting', true);
         AutoReporting = true;
-        ARHandler = setInterval(AR(), 600*1000);
+        ARHandler = setInterval(AR(), 600 * 1000);
     }
-    else
-    {
+    else {
         $('#ARInd').addClass('ARDisabled');
         $('#ARInd').removeClass('AREnabled');
         localStorage.setItem('AutoReporting', false);
@@ -55,19 +72,19 @@ function loadUserData() {
     var _Type = 'get';
     var _Data = { '_Id': User.Id };
     CallAPI(_Url, _Type, _Data, function (data) {
-        console.debug("User: "+data.Data);
-            if (data.Data.Img == 'null' || data.Data.Img == null)
-                data.Data.Img = 'images/unknown.png';
+        console.debug(data.Data);
+        if (data.Data.Img == 'null' || data.Data.Img == null)
+            data.Data.Img = 'images/unknown.png';
+        $('#user-img').attr('src', data.Data.Img);
+        if (data.Data.DisplayName == null) {
+            $('#user-name').text("");
+        }
+        else {
+            $('#user-name').text(data.Data.DisplayName);
             $('#user-img').attr('src', data.Data.Img);
-            if (data.Data.DisplayName == null) {
-                $('#user-name').text("");
-            }
-            else {
-                $('#user-name').text(data.Data.DisplayName);
-                $('#user-img').attr('src', data.Data.Img);
-                localStorage.setItem('User',JSON.stringify(data.Data));
-            }
-    },false);
+            localStorage.setItem('User', JSON.stringify(data.Data));
+        }
+    }, false);
 }
 
 function getCurrentStreetLocation() {
@@ -168,7 +185,7 @@ function GetCurrentStreetName(lat, long) {
 														<p><strong>Information:</strong><br /> No nearby streets</p>\
 													</div>');
             }
-        },false);
+        }, false);
     }, false);
 }
 
@@ -185,22 +202,22 @@ function getCurrentCountry(lat, long) {
     var _Type = 'get';
     var _Data = { 'latlng': lat + ',' + long, 'sensor': 'true' };
     CallAPI(_Url, _Type, _Data, function (data) {
-            var myAddress = new Array();
-            myAddress = data.results[0].formatted_address.split(',');
-            if (myAddress[4] != undefined) {
-                if (myAddress[4].toString().toLowerCase().trim() != localStorage.getItem("CurrentCountry")) {
-                    CountryToChange = myAddress[4];
-                    showCountryPopup();
-                }
-                else {
-                    CurrentCountry = "egypt";
-                    loadHome();
-                }
+        var myAddress = new Array();
+        myAddress = data.results[0].formatted_address.split(',');
+        if (myAddress[4] != undefined) {
+            if (myAddress[4].toString().toLowerCase().trim() != localStorage.getItem("CurrentCountry")) {
+                CountryToChange = myAddress[4];
+                showCountryPopup();
             }
             else {
                 CurrentCountry = "egypt";
                 loadHome();
             }
+        }
+        else {
+            CurrentCountry = "egypt";
+            loadHome();
+        }
     }, false);
 }
 
@@ -211,10 +228,10 @@ function loadUserFavourits() {
     var _Type = 'get';
     var _Data = { '_Id': User.Id };
     CallAPI(_Url, _Type, _Data, function (data) {
-            if (data.Code == 200) {
-                $('#loadeddata').empty();
-                $.each(data.Data, function (index, area) {
-                    $('#loadeddata').append('<div class="portlet" id="areaBar">\
+        if (data.Code == 200) {
+            $('#loadeddata').empty();
+            $.each(data.Data, function (index, area) {
+                $('#loadeddata').append('<div class="portlet" id="areaBar">\
                             <a data-toggle="collapse" data-parent="#loadeddata" href="#jq-spark' + collapseNum + '">\
                             <div class="portlet-heading">\
                                 <div class="portlet-title">\
@@ -236,14 +253,14 @@ function loadUserFavourits() {
                                 </div>\
                             </div>\
                         </div>');
-                    $.each(area.Areas.Streets, function (index, street) {
-                        var InUserFavourites = "false";
-                        if (street.isFavourit == true) {
-                            InUserFavourites = "true";
-                        }
+                $.each(area.Areas.Streets, function (index, street) {
+                    var InUserFavourites = "false";
+                    if (street.isFavourit == true) {
+                        InUserFavourites = "true";
+                    }
 
-                        if (street.Radar == 1 || street.Radar == 2) {
-                            $('#appendHere' + collapseNum).append('<div class="col-lg-12 col-sm-12">\
+                    if (street.Radar == 1 || street.Radar == 2) {
+                        $('#appendHere' + collapseNum).append('<div class="col-lg-12 col-sm-12">\
                                                     <a id="streetBar" href="streettimeline.html?streetId=' + street.Id + '&streetName=' + street.Title + '&status=' + street.CurrentStatus + '&isFavourite=' + InUserFavourites + '" class="tile-button btn btn-primary">\
                                                         <div class="tile-content-wrapper">\
                                                             <div class="col-sm-1 col-xs-1 text-center">\
@@ -261,9 +278,9 @@ function loadUserFavourits() {
                                                         </div>\
                                                     </a>\
                                                 </div>');
-                        }
-                        else if (street.Radar == 3) {
-                            $('#appendHere' + collapseNum).append('<div class="col-lg-12 col-sm-12">\
+                    }
+                    else if (street.Radar == 3) {
+                        $('#appendHere' + collapseNum).append('<div class="col-lg-12 col-sm-12">\
                                                     <a id="streetBar" href="streettimeline.html?streetId=' + street.Id + '&streetName=' + street.Title + '&status=' + street.CurrentStatus + '&isFavourite=' + InUserFavourites + '" class="tile-button btn btn-primary">\
                                                         <div class="tile-content-wrapper">\
                                                             <div class="col-sm-1 col-xs-1 text-center">\
@@ -282,9 +299,9 @@ function loadUserFavourits() {
                                                         </div>\
                                                     </a>\
                                                 </div>');
-                        }
-                        else {
-                            $('#appendHere' + collapseNum).append('<div class="col-lg-12 col-sm-12">\
+                    }
+                    else {
+                        $('#appendHere' + collapseNum).append('<div class="col-lg-12 col-sm-12">\
                                                     <a id="streetBar" href="streettimeline.html?streetId=' + street.Id + '&streetName=' + street.Title + '&status=' + street.CurrentStatus + '&isFavourite=' + InUserFavourites + '" class="tile-button btn btn-primary">\
                                                         <div class="tile-content-wrapper">\
                                                             <div class="col-sm-1 col-xs-1 text-center">\
@@ -299,23 +316,23 @@ function loadUserFavourits() {
                                                         </div>\
                                                     </a>\
                                                 </div>');
-                        }
-                        });
+                    }
+                });
 
-                    collapseNum++;
-                });
-                $('.clearfix').click(function () {
-                    console.log($(this).parent().find('.portlet-title').first());
-                    $(this).parent().find('.portlet-title').first().trigger('click');
-                });
-            }
-            else {
-                $('#loadeddata').empty();
-                $('#loadeddata').append('<div class="alert bg-info" id="areaBar">\
+                collapseNum++;
+            });
+            $('.clearfix').click(function () {
+                console.log($(this).parent().find('.portlet-title').first());
+                $(this).parent().find('.portlet-title').first().trigger('click');
+            });
+        }
+        else {
+            $('#loadeddata').empty();
+            $('#loadeddata').append('<div class="alert bg-info" id="areaBar">\
 														<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>\
 														<p><strong>Information:</strong><br /> You have no favourits </p>\
 													</div>');
-            }
+        }
     }, true);
 }
 
@@ -325,23 +342,23 @@ function loadHome() {
     var _Type = 'get';
     var _Data = { '_userId': User.Id, 'CurrentCountry': User.Country };
     CallAPI(_Url, _Type, _Data, function (data) {
-            if (data.Code != 20) {
-                $('#loadeddata').empty();
-                $.each(data.Data, function (indexx, area) {
-                    var data_step_for_area_name = "";
-                    var data_step_for_expander = "";
-                    var first_expander_id = "";
-                    if (indexx == 0) {
-                        data_step_for_area_name = "7";
-                        data_step_for_expander = "8";
-                        first_expander_id = "firstStreetExpander";
-                    }
-                    else {
-                        data_step_for_area_name = "";
-                        data_step_for_expander = "";
-                        first_expander_id = "";
-                    }
-                    $('#loadeddata').append('<div  class="portlet" id="areaBar">\
+        if (data.Code != 20) {
+            $('#loadeddata').empty();
+            $.each(data.Data, function (indexx, area) {
+                var data_step_for_area_name = "";
+                var data_step_for_expander = "";
+                var first_expander_id = "";
+                if (indexx == 0) {
+                    data_step_for_area_name = "7";
+                    data_step_for_expander = "8";
+                    first_expander_id = "firstStreetExpander";
+                }
+                else {
+                    data_step_for_area_name = "";
+                    data_step_for_expander = "";
+                    first_expander_id = "";
+                }
+                $('#loadeddata').append('<div  class="portlet" id="areaBar">\
                             <a data-toggle="collapse" data-intro="You will find areas and streets to acess from here" data-step="5" data-position="left" data-parent="#loadeddata" href="#jq-spark' + collapseNum + '">\
                             <div class="portlet-heading">\
                                 <div class="portlet-title">\
@@ -363,33 +380,33 @@ function loadHome() {
                                 </div>\
                             </div>\
                         </div>');
-                    $.each(area.Streets, function (index, street) {
-                        var data_step_for_street_status = "";
-                        var data_step_for_street_name = "";
-                        var data_step_for_last_street_report = "";
-                        var data_step_for_street_tile = "";
-                        var First_street_id = "";
-                        if (index == 0 && indexx == 0) {
-                            data_step_for_street_status = "10";
-                            data_step_for_street_name = "9";
-                            data_step_for_last_street_report = "11";
-                            data_step_for_street_tile = "12";
-                            First_street_id = "FirstStreetID";
-                        }
-                        else {
-                            data_step_for_street_status = "";
-                            data_step_for_street_name = "";
-                            data_step_for_last_street_report = "";
-                            data_step_for_street_tile = "";
-                            First_street_id = "";
-                        }
-                        var InUserFavourites = "false";
-                        if (street.isFavourit == true) {
-                            InUserFavourites = "true";
-                        }
+                $.each(area.Streets, function (index, street) {
+                    var data_step_for_street_status = "";
+                    var data_step_for_street_name = "";
+                    var data_step_for_last_street_report = "";
+                    var data_step_for_street_tile = "";
+                    var First_street_id = "";
+                    if (index == 0 && indexx == 0) {
+                        data_step_for_street_status = "10";
+                        data_step_for_street_name = "9";
+                        data_step_for_last_street_report = "11";
+                        data_step_for_street_tile = "12";
+                        First_street_id = "FirstStreetID";
+                    }
+                    else {
+                        data_step_for_street_status = "";
+                        data_step_for_street_name = "";
+                        data_step_for_last_street_report = "";
+                        data_step_for_street_tile = "";
+                        First_street_id = "";
+                    }
+                    var InUserFavourites = "false";
+                    if (street.isFavourit == true) {
+                        InUserFavourites = "true";
+                    }
 
-                        if (street.Radar == 1 || street.Radar ==2) {
-                            $('#appendHere' + collapseNum).append('<div class="col-lg-12 col-sm-12">\
+                    if (street.Radar == 1 || street.Radar == 2) {
+                        $('#appendHere' + collapseNum).append('<div class="col-lg-12 col-sm-12">\
                                                     <a id="streetBar" href="streettimeline.html?streetId=' + street.Id + '&streetName=' + street.Title + '&status=' + street.CurrentStatus + '&isFavourite=' + InUserFavourites + '" class="tile-button btn btn-primary">\
                                                         <div class="tile-content-wrapper">\
                                                             <div class="col-sm-1 col-xs-1 text-center">\
@@ -407,9 +424,9 @@ function loadHome() {
                                                         </div>\
                                                     </a>\
                                                 </div>');
-                        }
-                      else  if (street.Radar == 3) {
-                            $('#appendHere' + collapseNum).append('<div class="col-lg-12 col-sm-12">\
+                    }
+                    else if (street.Radar == 3) {
+                        $('#appendHere' + collapseNum).append('<div class="col-lg-12 col-sm-12">\
                                                     <a id="streetBar" href="streettimeline.html?streetId=' + street.Id + '&streetName=' + street.Title + '&status=' + street.CurrentStatus + '&isFavourite=' + InUserFavourites + '" class="tile-button btn btn-primary">\
                                                         <div class="tile-content-wrapper">\
                                                             <div class="col-sm-1 col-xs-1 text-center">\
@@ -428,9 +445,9 @@ function loadHome() {
                                                         </div>\
                                                     </a>\
                                                 </div>');
-                        }
-                        else {
-                            $('#appendHere' + collapseNum).append('<div class="col-lg-12 col-sm-12">\
+                    }
+                    else {
+                        $('#appendHere' + collapseNum).append('<div class="col-lg-12 col-sm-12">\
                                                     <a id="streetBar" href="streettimeline.html?streetId=' + street.Id + '&streetName=' + street.Title + '&status=' + street.CurrentStatus + '&isFavourite=' + InUserFavourites + '" class="tile-button btn btn-primary">\
                                                         <div class="tile-content-wrapper">\
                                                             <div class="col-sm-1 col-xs-1 text-center">\
@@ -445,29 +462,28 @@ function loadHome() {
                                                         </div>\
                                                     </a>\
                                                 </div>');
-                        }
-                    });
-                    $('.clearfix').click(function () {
-                        console.log($(this).parent().find('.portlet-title').first());
-                        $(this).parent().find('.portlet-title').first().trigger('click');
-                    });
-                    collapseNum++;
+                    }
                 });
-                var Tut = localStorage.getItem(Page + "_Tut");
-                if (Tut != true && Tut != "true")
-                {
-                    introJs().start();
-                    localStorage.setItem(Page + "_Tut", true);
-                }
+                $('.clearfix').click(function () {
+                    console.log($(this).parent().find('.portlet-title').first());
+                    $(this).parent().find('.portlet-title').first().trigger('click');
+                });
+                collapseNum++;
+            });
+            var Tut = localStorage.getItem(Page + "_Tut");
+            if (Tut != true && Tut != "true") {
+                introJs().start();
+                localStorage.setItem(Page + "_Tut", true);
             }
-            else {
-                $('#loadeddata').empty();
-                $('#loadeddata').append('<div class="alert bg-info" id="areaBar">\
+        }
+        else {
+            $('#loadeddata').empty();
+            $('#loadeddata').append('<div class="alert bg-info" id="areaBar">\
 														<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>\
 														<p><strong>Information:</strong><br /> No Areas Found </p>\
 													</div>');
-                getCurrentCountryLocation();
-            }
+            getCurrentCountryLocation();
+        }
     }, false);
 }
 function Refresh() {

@@ -4,12 +4,21 @@ var FirstTimeReplies = localStorage.getItem("FirstRunTimeReplies");
 
 var UserID = User.Id;
 var StreetID = localStorage.getItem('streetId');
-var StreetName =localStorage.getItem('streetName');
+var StreetName = localStorage.getItem('streetName');
 var StreetStatus = localStorage.getItem('status');
 var IsFavourite = localStorage.getItem('isFavourite');
 
 $(function () {
-    LoadUserData();
+    if (User == null || typeof User == 'undefined' || UserID < 1 || User.Email == "guest@superdrive.com") {
+        //hide icons
+        $('.toggleShow').attr('style', 'display:none !important');
+    }
+    else {
+        LoadUserData();
+        //show icons
+        $('.toggleShow').attr('style', 'display:block !important');
+    }
+
 
     var _Url = APILink + '/api/Reports/GetReportById';
     var _Type = "get";
@@ -64,12 +73,12 @@ $(function () {
                                     </div>\
                                 </div>\
                                 <div class="row text-right" >\
-                                    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">\
+                                    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 toggleShow">\
                                         <a data-intro="Click here to like this report" data-step="1" data-position="left" href="javascript:FeedBackReport(0,' + ReportID + ');"><i class="fa fa-thumbs-o-up"></i><span class="badge up badge-success" id="feedbacklikescounter"> ' + data.Data.Likes + ' </span></a>\
                                         <a data-intro="Click here to dislike this report" data-step="2" data-position="left" href="javascript:FeedBackReport(1,' + ReportID + ');"><i class="fa fa-thumbs-o-down"></i><span class="badge up badge-danger" id="feedbackdislikescounter"> ' + data.Data.Unlikes + ' </span></a>\
                                         <span data-intro="Click here to flag this report" data-step="3" data-position="left"><i class="fa fa-flag"></i><span class="badge up badge-suspended" id="feedbackflagscounter"> ' + data.Data.Flags + ' </span></span>\
                                     <\div>\
-                                </div>\
+                                </div><div class="clear"></div>\
                             </div>\
                     <div class="modal fade text-center" id="blockUserModal' + data.Data.UserId + '" role="dialog">\
                         <div class="modal-dialog">\
@@ -101,7 +110,7 @@ $(function () {
                     </div>');
             }
             else {
-            $('#TheReportCont').append('<div class="timeline-event-massage no-border">\
+                $('#TheReportCont').append('<div class="timeline-event-massage no-border">\
                                 <div class="row">\
                                     <div class="col-md-3 col-sm-3 col-lg-3 col-xs-3" >\
                                         <div>\
@@ -120,12 +129,12 @@ $(function () {
                                     </div>\
                                 </div>\
                                 <div class="row text-right" >\
-                                    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">\
+                                    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 toggleShow">\
                                         <a data-intro="Click here to like this report" data-step="1" data-position="left" href="javascript:FeedBackReport(0,' + ReportID + ');"><i class="fa fa-thumbs-o-up"></i><span class="badge up badge-success" id="feedbacklikescounter"> ' + data.Data.Likes + ' </span></a>\
                                         <a data-intro="Click here to dislike this report" data-step="2" data-position="left" href="javascript:FeedBackReport(1,' + ReportID + ');"><i class="fa fa-thumbs-o-down"></i><span class="badge up badge-danger" id="feedbackdislikescounter"> ' + data.Data.Unlikes + ' </span></a>\
                                         <a data-intro="Click here to flag this report" data-step="3" data-position="left" href="javascript:FeedBackReport(4,' + ReportID + ');"><i class="fa fa-flag"></i><span class="badge up badge-suspended" id="feedbackflagscounter"> ' + data.Data.Flags + ' </span></a>\
                                     <\div>\
-                                </div>\
+                                </div><div class="clear"></div>\
                             </div>\
                     <div class="modal fade text-center" id="blockUserModal' + data.Data.UserId + '" role="dialog">\
                         <div class="modal-dialog">\
@@ -168,7 +177,16 @@ $(function () {
                 time: 2000
             });
         }
-
+        if (User == null || typeof User == 'undefined' || UserID < 1 || User.Email == "guest@superdrive.com") {
+            //hide icons
+            $('.toggleShow').attr('style', 'display:none !important');
+            $('.btn-danger').attr('style', 'display:none !important');
+        }
+        else {
+            //show icons
+            $('.toggleShow').attr('style', 'display:block !important');
+            $('.btn-danger').attr('style', 'display:block !important');
+        }
     }, false);
 
 
@@ -181,9 +199,9 @@ $(function () {
             console.log(data.Data);
             console.log(UserID);
             $.each(data.Data, function (index, reply) {
-                
+
                 if (UserID == reply.UserId) {
-                    
+
                     $('#timeline').append('<li class="timeline-event">\
                                                     <div class="timeline-event-point"></div>\
                                                     <div class="timeline-event-wrap">\
@@ -238,7 +256,7 @@ $(function () {
                 }
                 else {
                     //alert('else');
-                $('#timeline').append('<li class="timeline-event">\
+                    $('#timeline').append('<li class="timeline-event">\
                                                     <div class="timeline-event-point"></div>\
                                                     <div class="timeline-event-wrap">\
                                                         <div class="timeline-event-time" id="posttime">\
@@ -301,22 +319,40 @@ $(function () {
             $('#timeline').attr('style', 'margin-left:-40px');
         }
     }, false);
+
+    openFB.init({ appId: '1626203094287345' });
+    setTimeout(function () {
+        $(".welcomeMsg").animate({
+            bottom: 5
+        }, 2000, function () {
+            $("#divLogin").fadeIn(800);
+        });
+    }, 1000);
+
+
+
 });
 
 
-function ReplyReport(type) {
-    if ($('#txtReport').val() == "") {
-        return;
-    }
-    var text = $('#txtReport').val();
-    var userid = User.Id;
-    var _Url = APILink + '/api/ReportActions/ReportFeedbackAction';
-    var _Type = "post";
-    var _Data = { 'ActionText': text, 'ReportId': ReportID, 'UserId': userid, 'ActionType': type };
-    CallAPI(_Url, _Type, _Data, function (reply) {
 
-        $('#empty-streets-msg').remove();
-        $('#timeline').prepend('<li class="timeline-event" id="Reply' + reply.Data.Id + '">\
+function ReplyReport(type) {
+    if (User == null || typeof User == 'undefined' || UserID < 1 || User.Email == "guest@superdrive.com") {
+        //login modal
+        $('#loginModal').modal('show');
+    }
+    else {
+        if ($('#txtReport').val() == "") {
+            return;
+        }
+        var text = $('#txtReport').val();
+        var userid = User.Id;
+        var _Url = APILink + '/api/ReportActions/ReportFeedbackAction';
+        var _Type = "post";
+        var _Data = { 'ActionText': text, 'ReportId': ReportID, 'UserId': userid, 'ActionType': type };
+        CallAPI(_Url, _Type, _Data, function (reply) {
+
+            $('#empty-streets-msg').remove();
+            $('#timeline').prepend('<li class="timeline-event" id="Reply' + reply.Data.Id + '">\
                                                 <div class="timeline-event-point"></div>\
                                                 <div class="timeline-event-wrap">\
                                                     <div class="timeline-event-time" id="posttime">\
@@ -339,56 +375,84 @@ function ReplyReport(type) {
                                                     </div>\
                                                 </div>\
                                             </li>');
-        $('#txtReport').val("");
-    }, false);
-    return;
+            $('#txtReport').val("");
+        }, false);
+        return;
+    }
 }
 
 function FeedBackReport(id, ReportID) {
-    var userid = User.Id;
-    var _Url = APILink + '/api/ReportActions/ReportFeedbackAction';
-    var _Type = "post";
-    var _Data = { 'ActionType': id, 'ReportId': ReportID, 'UserId': userid };
-    CallAPI(_Url, _Type, _Data, function (data) {
+    console.log('enter FeedBackReport');
+    if (User == null || typeof User == 'undefined' || UserID < 1 || User.Email == "guest@superdrive.com") {
+        //login modal
+        $('#loginModal').modal('show');
+        console.log('not logged');
+    }
+    else {
+        console.log('logged');
+        var userid = User.Id;
+        var _Url = APILink + '/api/ReportActions/ReportFeedbackAction';
+        var _Type = "post";
+        var _Data = { 'ActionType': id, 'ReportId': ReportID, 'UserId': userid };
+        CallAPI(_Url, _Type, _Data, function (data) {
 
-        if (data.Data == "Exist like" || data.Data == "Exist dislike" || data.Data == "Exist flag") {
-            var PreviouseStatus = data.Data.replace("Exist ", "");
-            if (PreviouseStatus == "like") {
-                if (id == 1) {
-                    var dislikesCount = parseInt($('#feedbackdislikescounter').text());
-                    dislikesCount++;
-                    $('#feedbackdislikescounter').text(dislikesCount.toString());
-                    var likesCount = parseInt($('#feedbacklikescounter').text());
-                    likesCount--;
-                    $('#feedbacklikescounter').text(likesCount.toString());
+            if (data.Data == "Exist like" || data.Data == "Exist dislike" || data.Data == "Exist flag") {
+                var PreviouseStatus = data.Data.replace("Exist ", "");
+                if (PreviouseStatus == "like") {
+                    if (id == 1) {
+                        var dislikesCount = parseInt($('#feedbackdislikescounter').text());
+                        dislikesCount++;
+                        $('#feedbackdislikescounter').text(dislikesCount.toString());
+                        var likesCount = parseInt($('#feedbacklikescounter').text());
+                        likesCount--;
+                        $('#feedbacklikescounter').text(likesCount.toString());
+                    }
+                    if (id == 4) {
+                        var flagsCount = parseInt($('#feedbackflagscounter').text());
+                        flagsCount++;
+                        $('#feedbackflagscounter').text(flagsCount.toString());
+                        var likesCount = parseInt($('#feedbacklikescounter').text());
+                        likesCount--;
+                        $('#feedbacklikescounter').text(likesCount.toString());
+                        location.href = 'streettimeline.html?streetId=' + StreetID + '&streetName=' + StreetName + '&status=' + status + '&isFavourite=' + IsFavourite + '';
+                    }
                 }
-                if (id == 4) {
-                    var flagsCount = parseInt($('#feedbackflagscounter').text());
-                    flagsCount++;
-                    $('#feedbackflagscounter').text(flagsCount.toString());
-                    var likesCount = parseInt($('#feedbacklikescounter').text());
-                    likesCount--;
-                    $('#feedbacklikescounter').text(likesCount.toString());
-                    location.href = 'streettimeline.html?streetId=' + StreetID + '&streetName=' + StreetName + '&status=' + status + '&isFavourite=' + IsFavourite + '';
+                else if (PreviouseStatus == "dislike") {
+                    if (id == 0) {
+                        var likesCount = parseInt($('#feedbacklikescounter').text());
+                        likesCount++;
+                        $('#feedbacklikescounter').text(likesCount.toString());
+                        var dislikesCount = parseInt($('#feedbackdislikescounter').text());
+                        dislikesCount--;
+                        $('#feedbackdislikescounter').text(dislikesCount.toString());
+                    }
+                    if (id == 4) {
+                        var flagsCount = parseInt($('#feedbackflagscounter').text());
+                        flagsCount++;
+                        $('#feedbackflagscounter').text(flagsCount.toString());
+                        var dislikesCount = parseInt($('#feedbackdislikescounter').text());
+                        dislikesCount--;
+                        $('#feedbackdislikescounter').text(dislikesCount.toString());
+                        location.href = 'streettimeline.html?streetId=' + StreetID + '&streetName=' + StreetName + '&status=' + status + '&isFavourite=' + IsFavourite + '';
+                    }
                 }
-            }
-            else if (PreviouseStatus == "dislike") {
-                if (id == 0) {
-                    var likesCount = parseInt($('#feedbacklikescounter').text());
-                    likesCount++;
-                    $('#feedbacklikescounter').text(likesCount.toString());
-                    var dislikesCount = parseInt($('#feedbackdislikescounter').text());
-                    dislikesCount--;
-                    $('#feedbackdislikescounter').text(dislikesCount.toString());
-                }
-                if (id == 4) {
-                    var flagsCount = parseInt($('#feedbackflagscounter').text());
-                    flagsCount++;
-                    $('#feedbackflagscounter').text(flagsCount.toString());
-                    var dislikesCount = parseInt($('#feedbackdislikescounter').text());
-                    dislikesCount--;
-                    $('#feedbackdislikescounter').text(dislikesCount.toString());
-                    location.href = 'streettimeline.html?streetId=' + StreetID + '&streetName=' + StreetName + '&status=' + status + '&isFavourite=' + IsFavourite + '';
+                else {
+                    if (id == 0) {
+                        var likesCount = parseInt($('#feedbacklikescounter').text());
+                        likesCount++;
+                        $('#feedbacklikescounter').text(likesCount.toString());
+                        var dislikesCount = parseInt($('#feedbackflagscounter').text());
+                        dislikesCount--;
+                        $('#feedbackflagscounter').text(dislikesCount.toString());
+                    }
+                    if (id == 1) {
+                        var dislikesCount = parseInt($('#feedbackdislikescounter').text());
+                        dislikesCount++;
+                        $('#feedbackdislikescounter').text(dislikesCount.toString());
+                        var dislikesCount = parseInt($('#feedbackflagscounter').text());
+                        dislikesCount--;
+                        $('#feedbackflagscounter').text(dislikesCount.toString());
+                    }
                 }
             }
             else {
@@ -396,46 +460,28 @@ function FeedBackReport(id, ReportID) {
                     var likesCount = parseInt($('#feedbacklikescounter').text());
                     likesCount++;
                     $('#feedbacklikescounter').text(likesCount.toString());
-                    var dislikesCount = parseInt($('#feedbackflagscounter').text());
-                    dislikesCount--;
-                    $('#feedbackflagscounter').text(dislikesCount.toString());
                 }
                 if (id == 1) {
                     var dislikesCount = parseInt($('#feedbackdislikescounter').text());
                     dislikesCount++;
                     $('#feedbackdislikescounter').text(dislikesCount.toString());
-                    var dislikesCount = parseInt($('#feedbackflagscounter').text());
-                    dislikesCount--;
-                    $('#feedbackflagscounter').text(dislikesCount.toString());
+                }
+                if (id == 4) {
+                    var flagsCount = parseInt($('#feedbackflagscounter').text());
+                    flagsCount++;
+                    $('#feedbackflagscounter').text(flagsCount.toString());
+                    location.href = 'streettimeline.html?streetId=' + StreetID + '&streetName=' + StreetName + '&status=' + status + '&isFavourite=' + IsFavourite + '';
                 }
             }
-        }
-        else {
-            if (id == 0) {
-                var likesCount = parseInt($('#feedbacklikescounter').text());
-                likesCount++;
-                $('#feedbacklikescounter').text(likesCount.toString());
-            }
-            if (id == 1) {
-                var dislikesCount = parseInt($('#feedbackdislikescounter').text());
-                dislikesCount++;
-                $('#feedbackdislikescounter').text(dislikesCount.toString());
-            }
-            if (id == 4) {
-                var flagsCount = parseInt($('#feedbackflagscounter').text());
-                flagsCount++;
-                $('#feedbackflagscounter').text(flagsCount.toString());
-                location.href = 'streettimeline.html?streetId=' + StreetID + '&streetName=' + StreetName + '&status=' + status + '&isFavourite=' + IsFavourite + '';
-            }
-        }
-    }, false);
+        }, false);
+    }
 }
 
 function BlockUser(_id) {
 
     var _Url = APILink + 'api/Blocks/Add';
     var _Type = 'post';
-    var _Data = { 'UserId': User.Id ,'BlockedId':_id};
+    var _Data = { 'UserId': User.Id, 'BlockedId': _id };
     CallAPI(_Url, _Type, _Data, function (data) {
         if (data.Code == 200) {
             location.href = 'streettimeline.html?streetId=' + StreetID + '&streetName=' + StreetName + '&status=' + status + '&isFavourite=' + IsFavourite + '';

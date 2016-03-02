@@ -13,55 +13,81 @@ var selectedStatus = 0;
 var Page = 'Street';
 
 $(document).ready(function () {
-    LoadUserData();
-    if (IsFavourite == "true" || IsFavourite == true) {
-        $('.addFavouriteStart i').removeClass('fa-star-o').addClass('fa-star');
+
+    if (User == null || typeof User == 'undefined' || UserID < 1 || User.Email == "guest@superdrive.com") {
+        //hide icons
+        $('.toggleShow').attr('style', 'display:none !important');
+    }
+    else {
+        UserID == User.Id;
+        console.log(User.Id);
+        LoadUserData();
+        if (IsFavourite == "true" || IsFavourite == true) {
+            $('.addFavouriteStart i').removeClass('fa-star-o').addClass('fa-star');
+        }
+        //show icons
+        $('.toggleShow').attr('style', 'display:block !important');
     }
     LoadTimeline();
-});
-function Post() {
-    if (selectedEmoticon == 0 && selectedStatus == 0) {
-        $.gritter.add({
-            title: "Reporting failed!",
-            text: "Please choose an icon for your report.",
-            image: "images/blueprint_icon.png",
-            class_name: "bg-danger",
-            sticky: false
-        });
-        return false;
-    }
-    var text = $('#text').val();
-    var streetid = StreetID;
-    var report = selectedEmoticon;
-    var userid = User.Id;
-    var extraInfo = selectedStatus;
-    var image = $('#UploadedImageSource').val();
-    var _Url = APILink + '/api/Reports/ReportStreet';
-    var _Type = "post";
-    var _Data = { 'ReportText': text, 'StreetId': streetid, 'ReportImage': image, 'UserId': userid, 'StreetExtraInfo': report, 'StreetStatus': selectedStatus, 'AnonymousReport': false };
-    CallAPI(_Url, _Type, _Data, function (data) {
-        $('#empty-streets-msg').remove();
-        var commenttext = "";
-        if (data.Data.ReportText == null) {
-            commenttext = "";
-        }
-        else {
-            commenttext = data.Data.ReportText;
-        }
-        var StreetStatusToAppend = "";
-        if (data.Data.StreetStatus != null && data.Data.StreetStatus != 0) {
-            StreetStatusToAppend = '<img class="radarIcon" src="images/StreetStatus' + data.Data.StreetStatus + '.png" />';
-        }
 
-        var ReportImage = "";
-        if (data.Data.ReportImage != null) {
-            ReportImage = '<a href="javascript:ViewImage(\'' + data.Data.ReportImage + '\');"><img class="postImg" src="data:image/png;base64,' + data.Data.ReportImage + '" alt="report image" /></a>';
+    openFB.init({ appId: '1626203094287345' });
+    setTimeout(function () {
+        $(".welcomeMsg").animate({
+            bottom: 5
+        }, 2000, function () {
+            $("#divLogin").fadeIn(800);
+        });
+    }, 1000);
+});
+
+function Post() {
+    if (User == null || typeof User == 'undefined' || UserID < 1 || User.Email == "guest@superdrive.com") {
+        //login modal
+        $('#loginModal').modal('show');
+    }
+    else {
+        if (selectedEmoticon == 0 && selectedStatus == 0) {
+            $.gritter.add({
+                title: "Reporting failed!",
+                text: "Please choose an icon for your report.",
+                image: "images/blueprint_icon.png",
+                class_name: "bg-danger",
+                sticky: false
+            });
+            return false;
         }
-        var EmoticonImageElement = "";
-        if (data.Data.StreetExtraInfo == 1 || data.Data.StreetExtraInfo == 2 || data.Data.StreetExtraInfo == 3 || data.Data.StreetExtraInfo == 4) {
-            EmoticonImageElement = '<img class="MainImg" src="images/' + data.Data.StreetExtraInfo + '.png" class="MainImg" />';
-        }
-        $('#appendform').prepend('<li class="timeline-event">\
+        var text = $('#text').val();
+        var streetid = StreetID;
+        var report = selectedEmoticon;
+        var userid = User.Id;
+        var extraInfo = selectedStatus;
+        var image = $('#UploadedImageSource').val();
+        var _Url = APILink + '/api/Reports/ReportStreet';
+        var _Type = "post";
+        var _Data = { 'ReportText': text, 'StreetId': streetid, 'ReportImage': image, 'UserId': userid, 'StreetExtraInfo': report, 'StreetStatus': selectedStatus, 'AnonymousReport': false };
+        CallAPI(_Url, _Type, _Data, function (data) {
+            $('#empty-streets-msg').remove();
+            var commenttext = "";
+            if (data.Data.ReportText == null) {
+                commenttext = "";
+            }
+            else {
+                commenttext = data.Data.ReportText;
+            }
+            var StreetStatusToAppend = "";
+            if (data.Data.StreetStatus != null && data.Data.StreetStatus != 0) {
+                StreetStatusToAppend = '<img class="radarIcon" src="images/StreetStatus' + data.Data.StreetStatus + '.png" />';
+            }
+
+            var ReportImage = "";
+            if (data.Data.ReportImage != null) {
+                ReportImage = '<a href="javascript:ViewImage(\'' + data.Data.ReportImage + '\');"><img class="postImg" src="data:image/png;base64,' + data.Data.ReportImage + '" alt="report image" /></a>';
+            }
+            var EmoticonImageElement = "";
+            if (data.Data.StreetExtraInfo == 1 || data.Data.StreetExtraInfo == 2 || data.Data.StreetExtraInfo == 3 || data.Data.StreetExtraInfo == 4) {
+                EmoticonImageElement = '<img class="MainImg" src="images/' + data.Data.StreetExtraInfo + '.png" class="MainImg" />';
+            }
+            $('#appendform').prepend('<li class="timeline-event">\
                                         <div class="timeline-event-point"></div>\
                                         <div class="timeline-event-wrap">\
                                             <div class="timeline-event-time" id="posttime">\
@@ -78,8 +104,8 @@ function Post() {
                                                         </div>\
                                                     </div>\
                                                     <div class="col-md-7 col-sm-7 col-lg-7 col-xs-7">\
-                                                        <a class="author" id="postname"><h6> ' + data.Data.Users.DisplayName + '  </h6></a>\
-                                                        <span> ' + commenttext + '</span>\
+                                                        <a onclick="javascript:location.href=\'streetreplies.html?reportId=' + data.Data.Id + '\'" class="author" id="postname"><h6> ' + data.Data.Users.DisplayName + '  </h6></a>\
+                                                        <span onclick="javascript:location.href=\'streetreplies.html?reportId=' + data.Data.Id + '\'"> ' + commenttext + '</span>\
                                                        ' + ReportImage + '\
                                                     </div>\
                                                     <div class="col-md-2 col-sm-2 col-lg-2 col-xs-2">\
@@ -89,13 +115,13 @@ function Post() {
                                             </div>\
                                         </div>\
                                     </li>');
-        $('#UploadedImageSource').val("");
-        $('#text').text("");
-        $('#text').val("");
-        window.scrollTo(0, 500);
-        updateStatus();
-    }, false);
-
+            $('#UploadedImageSource').val("");
+            $('#text').text("");
+            $('#text').val("");
+            window.scrollTo(0, 500);
+            updateStatus();
+        }, false);
+    }
 
 }
 function PostAnonymous() {
@@ -175,7 +201,7 @@ function PostAnonymous() {
         updateStatus();
     }, false);
 
-    
+
 }
 function LoadTimeline() {
     $('#appendform').empty();
@@ -183,7 +209,7 @@ function LoadTimeline() {
 
     var _Url = APILink + '/api/Streets/GetById';
     var _Type = "get";
-    var _Data = { '_Id': StreetID};
+    var _Data = { '_Id': StreetID };
     CallAPI(_Url, _Type, _Data, function (data) {
         console.debug(data);
         if (data.Code != 20) {

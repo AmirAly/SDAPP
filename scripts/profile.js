@@ -113,7 +113,61 @@ $(document).ready(function () {
 
 function Logout() {
     localStorage.clear();
-    window.location.href = "index.html";
+    console.log('localStorage cleared');
+    setTimeout(function () {
+        window.location.href = "index.html";
+    },2000);
+
+    //var _Url = APILink + '/api/Users/Login';
+    //var _Type = "post";
+    //var _email = 'guest@superdrive.com';
+    //var _password = '123456789';
+    //var _Data = { 'Email': _email, 'Password': _password };
+    //CallAPI(_Url, _Type, _Data, function (data) {
+    //    if (data.Code == 200) {
+    //        console.log(data.Data);
+    //        localStorage.setItem("User", JSON.stringify(data.Data));
+    //        $.gritter.add({
+    //            title: 'Thank you, please wait',
+    //            text: 'You will be redirected now',
+    //            sticky: false,
+    //            class_name: 'bg-info',
+    //            time: '4000'
+    //        });
+    //        User = JSON.parse(localStorage.getItem("User"));
+    //        if (User.Status == "3")
+    //            location.href = "home.html";
+    //        else
+    //            location.href = "profile.html";
+    //        return false;
+    //    }
+    //    else if (data.Code == 20) {
+    //        $.loader('close');
+    //        $.gritter.add({
+    //            title: 'It seems there is something wrong !',
+    //            text: 'You account has been suspended',
+    //            sticky: 'We think you forgot your login info !',
+    //            class_name: 'bg-info',
+    //            time: '400'
+    //        });
+    //        $('#linkRegister').removeClass('hideLoader');
+    //        $('#linkLogin').removeClass('hideLoader');
+    //        return false;
+    //    }
+    //    else {
+    //        $.loader('close');
+    //        $.gritter.add({
+    //            title: 'It seems there is something wrong !',
+    //            text: 'Username or password incorrect',
+    //            sticky: 'We think you forgot your login info !',
+    //            class_name: 'bg-info',
+    //            time: '400'
+    //        });
+    //        $('#linkRegister').removeClass('hideLoader');
+    //        $('#linkLogin').removeClass('hideLoader');
+    //        return false;
+    //    }
+    //}, false);
 }
 
 function LoadingUserData() {

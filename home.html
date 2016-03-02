@@ -23,9 +23,9 @@
                 <div class="navbar-header col-md-12 col-sm-12 col-xs-12">
                     <div class="navbar-brand col-md-12 col-sm-12 col-xs-12">
                         <ul class="nav navbar-left col-md-12 col-sm-12 col-xs-12 text-center" style="color:white" data-intro="This is your navigation bar" data-step="1" data-position="bottom">
-                            <li class="col-md-4 col-sm-4 col-xs-4" onclick="javascript:location.href='home.html'">
+                            <li class="col-md-4 col-sm-4 col-xs-4 " onclick="javascript:location.href='home.html'">
 
-                                <i class="fa fa-home"></i>
+                                <i class="fa fa-home toggleShow"></i>
 
                             </li>
                             <li class="col-md-4 col-sm-4 col-xs-4 sip" onclick="showGPSBar()" data-intro="Here you will access all GPS features" data-step="2" data-position="bottom">
@@ -35,7 +35,7 @@
                             </li>
                             <li class="col-md-4 col-sm-4 col-xs-4 sip" onclick="loadUserFavourits()">
 
-                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star toggleShow"></i>
 
                             </li>
                         </ul>
@@ -44,7 +44,7 @@
 
                 <div class="nav-top col-md-12 col-sm-12 col-xs-12">
                     <ul class="nav navbar-right col-md-12 col-sm-12 col-xs-12">
-                        <li class="dropdown">
+                        <li class="dropdown toggleShow">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-bell"></i><span class="badge up badge-success NotificationsCount">0</span>
                             </a>
@@ -63,8 +63,9 @@
                             </ul>
                         </li>
 
-                        <li class="dropdown user-box">
-                            <a href="profile.html" data-intro="Access your profile from here" data-step="4" data-position="left">
+                        <li class="dropdown user-box toggleShow">
+                            <a class="toggleShow userProfile" href="">
+                                <!--<a class="toggleShow" href="profile.html" data-intro="Access your profile from here" data-step="4" data-position="left">-->
                                 <img id="user-img" class="img-circle" src="images/unknown.png" alt="">
                                 <span id="user-name" class="user-info"></span>
                             </a>
@@ -118,6 +119,6 @@
     <script src="js/plugins/bootbox/bootbox.min.js"></script>
     <script src="scripts/general.js"></script>
     <script src="scripts/home.js"></script>
-	<script src="js/watermark.jquery.min.js"></script>
+    <script src="js/watermark.jquery.min.js"></script>
 </body>
 </html>

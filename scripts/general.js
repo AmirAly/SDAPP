@@ -1,8 +1,10 @@
 //var APILink = 'http://localhost:4704/';
 var APILink = 'http://sdapi.deltacode.co';
 var User;
-if (typeof localStorage.getItem('User') != undefined)
+if (typeof localStorage.getItem('User') != undefined) {
     User = JSON.parse(localStorage.getItem('User'));
+}
+
 var ARHandler = null;
 var AutoReporting = localStorage.getItem('AutoReporting');
 function AR() {
@@ -48,7 +50,7 @@ function CallAPI(_url, _type, _data, onsuccess, cashed) {
         url: _url,
         type: _type,
         data: _data,
-        timeout:12000,
+        timeout: 12000,
         beforeSend: function () {
             var Cashed = localStorage.getItem(_url);
             if (cashed == false || Cashed === null) {
@@ -783,7 +785,7 @@ function ViewImage(src) {
         className: 'wtr',
         position: 'top-right',
         path: '/images/icon.png',
-        opacity:'0.5'
+        opacity: '0.5'
     });
 }
 function OpenFeedbackPopup() {
@@ -827,17 +829,17 @@ function OpenFeedbackPopup() {
                     var _Type = "get";
                     var _Data = { '_mail': mail, '_text': text };
                     CallAPI(_Url, _Type, _Data, function (data) {
-                            $.gritter.add({
-                                title: "successfull operation!",
-                                text: "your feedback sent successfully.",
-                                image: "images/blueprint_icon.png",
-                                class_name: "bg-success",
-                                sticky: false,
-                                time: 1000
-                            });
-                            return false;
+                        $.gritter.add({
+                            title: "successfull operation!",
+                            text: "your feedback sent successfully.",
+                            image: "images/blueprint_icon.png",
+                            class_name: "bg-success",
+                            sticky: false,
+                            time: 1000
+                        });
+                        return false;
 
-                    },false);
+                    }, false);
                 }
             },
             danger: {
@@ -855,29 +857,29 @@ function LoadNotifications() {
     var _Type = 'get';
     var _Data = { '_UserId': User.Id };
     CallAPIInBackground(_Url, _Type, _Data, function (data) {
-            var NotiCounter = 0;
-            if (data.Code == 20)
-                return;
-            $.each(data.Data, function (index, noti) {
-                var iconclass;
-                if (noti.Type == 1) {
-                    iconclass = "fa-question";
-                }
-                else {
-                    iconclass = "fa-comment";
-                }
-                $('#alertScroll .list-unstyled').append('<li>\
+        var NotiCounter = 0;
+        if (data.Code == 20)
+            return;
+        $.each(data.Data, function (index, noti) {
+            var iconclass;
+            if (noti.Type == 1) {
+                iconclass = "fa-question";
+            }
+            else {
+                iconclass = "fa-comment";
+            }
+            $('#alertScroll .list-unstyled').append('<li>\
                                             <a href="javascript:SetAsViewed(' + noti.Id + ',\'' + noti.RedirectsTo + '\');">\
                                                 <div class="alert-icon bg-info pull-left">\
-                                                    <i class="fa '+iconclass+' "></i>\
+                                                    <i class="fa '+ iconclass + ' "></i>\
                                                 </div>\
                 ' + noti.Statment + '\
             </a>\
         </li>');
-                NotiCounter++;
-            });
-            $('.NotificationsCount').text(NotiCounter.toString());
-    },false);
+            NotiCounter++;
+        });
+        $('.NotificationsCount').text(NotiCounter.toString());
+    }, false);
 }
 function NotificationTimer() {
     if (Page == 'Login')
@@ -887,39 +889,39 @@ function NotificationTimer() {
         var _Type = 'get';
         var _Data = { '_UserId': User.Id };
         CallAPI1(_Url, _Type, _Data, function (data) {
-                if (data.Code != 20) {
-                        var NotiCounter = 0;
-                        $('#alertScroll .list-unstyled').empty();
-                        $.each(data.Data, function (index, noti) {
-                            var iconclass;
-                            if (noti.Type == 1) {
-                                iconclass = "fa-question";
-                            }
-                            else {
-                                iconclass = "fa-comment";
-                            }
-                            
-                            $('#alertScroll .list-unstyled').append('<li>\
+            if (data.Code != 20) {
+                var NotiCounter = 0;
+                $('#alertScroll .list-unstyled').empty();
+                $.each(data.Data, function (index, noti) {
+                    var iconclass;
+                    if (noti.Type == 1) {
+                        iconclass = "fa-question";
+                    }
+                    else {
+                        iconclass = "fa-comment";
+                    }
+
+                    $('#alertScroll .list-unstyled').append('<li>\
                                             <a href="javascript:SetAsViewed(' + noti.Id + ',\'' + noti.RedirectsTo + '\');">\
                                                 <div class="alert-icon bg-info pull-left">\
-                                                    <i class="fa '+iconclass+'"></i>\
+                                                    <i class="fa '+ iconclass + '"></i>\
                                                 </div>\
                 ' + noti.Statment + '\
             </a>\
         </li>');
-                            NotiCounter++;
-                        });
-                        $('.NotificationsCount').text(NotiCounter.toString());
-                        var NL = localStorage.getItem("NotificationsList");
-                        if (NL != data.Data) {
-                            localStorage.setItem("NotificationsList", data.Data);
-                            if (localStorage.getItem('NotificationSoundEnabled') == 1) {
-                                var audio = new Audio('sounds/chs.mp3');
-                                audio.play();
-                            }
+                    NotiCounter++;
+                });
+                $('.NotificationsCount').text(NotiCounter.toString());
+                var NL = localStorage.getItem("NotificationsList");
+                if (NL != data.Data) {
+                    localStorage.setItem("NotificationsList", data.Data);
+                    if (localStorage.getItem('NotificationSoundEnabled') == 1) {
+                        var audio = new Audio('sounds/chs.mp3');
+                        audio.play();
                     }
                 }
-        },false);
+            }
+        }, false);
     }, 10000);
 }
 function HidePopup() {
@@ -935,7 +937,7 @@ function SetAsViewed(Id, redirectURL) {
     var _Data = { '_Id': Id };
     CallAPI(_Url, _Type, _Data, function (data) {
         location.href = redirectURL;
-    },false);
+    }, false);
     $.loader('close');
 }
 $(document).ready(function () {
@@ -951,21 +953,18 @@ $(document).ready(function () {
         //StartIntro();
     }
     console.debug("AR: " + AutoReporting);
-    if (AutoReporting == "true")
-    {
+    if (AutoReporting == "true") {
         AR();
         console.debug("AR: Fired" + AutoReporting);
-        if (Page == 'Home')
-        {
+        if (Page == 'Home') {
             $('#ARInd').addClass('AREnabled');
             $('#ARInd').removeClass('ARDisabled');
         }
     }
-      
+
 });
-function submit(frm)
-{
-    $('#'+frm).submit();
+function submit(frm) {
+    $('#' + frm).submit();
 }
 function LoadUserData() {
     $('#user-img').attr('src', User.Img);

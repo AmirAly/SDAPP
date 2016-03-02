@@ -57,6 +57,10 @@
     border-left: solid #fff 1px;
 }
 
+.modal-body img{
+    width:100%;
+}
+
 .tripDetails {
     background-color: #fff;
 }
